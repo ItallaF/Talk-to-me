@@ -1,6 +1,7 @@
 import express, { Application } from 'express';
 import http from 'http';
 import { Server, Socket } from 'socket.io';
+
 class App {
   private app: Application;
   private http: http.Server;
@@ -9,11 +10,15 @@ class App {
   constructor() {
     this.app = express();
     this.http = new http.Server(this.app);
-    this.io = new Server(this.http);
+    this.io = new Server(this.http, {
+      cors: {
+        origin: '*',
+      },
+    });
   }
 
   public listen() {
-    this.app.listen(33333, () => {
+    this.http.listen(33333, () => {
       console.log('Server is running on port 33333');
     })
   }
@@ -25,12 +30,16 @@ class App {
   private socketEvents(socket: Socket) {
     console.log('Socket connected: ' + socket.id);
     socket.on('subscribe', (data) => {
+      console.log('usuario inserido na sala' + data.roomId);
       socket.join(data.roomId)
 
-      socket.broadcast.to(data.roomId).emit('chat', {
-        mesage: data.mesage,
-        usarname: data.usarname,
-        time: data.time
+      socket.on('chat', (data) => {
+        console.log('🚀 ~ App ~ socket.on ~ data:', data);
+        socket.broadcast.to(data.roomId).emit('chat', {
+          mesage: data.mesage,
+          usarname: data.usarname,
+          time: data.time
+        })
       })
     })
   }
