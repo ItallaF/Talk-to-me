@@ -18,8 +18,8 @@ class App {
   }
 
   public listen() {
-    this.http.listen(33333, () => {
-      console.log('Server is running on port 33333');
+    this.http.listen(3333, () => {
+      console.log('Server is running on port 3333');
     })
   }
 
