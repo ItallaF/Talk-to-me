@@ -39,7 +39,7 @@ class App {
       if (roomSession.length > 1) {
         socket.to(data.roomId).emit('new user', {
           socketId: socket.id,
-          usarname: data.usarname,
+          username: data.username,
         })
       }
     });
@@ -70,7 +70,7 @@ class App {
       console.log('🚀 ~ App ~ socket.on ~ data:', data);
       socket.broadcast.to(data.roomId).emit('chat', {
         mesage: data.mesage,
-        usarname: data.usarname,
+        username: data.username,
         time: data.time
       });
     });
