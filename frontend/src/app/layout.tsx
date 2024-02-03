@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
 import "./globals.css";
-import { SocketProvider } from "@/contexts/SocketContexts";
+import { SocketProvider } from "@/contexts/SocketContext";
 
 const rubik = Rubik({ subsets: ["latin"] });
 
