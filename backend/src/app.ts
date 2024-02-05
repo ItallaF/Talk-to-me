@@ -74,6 +74,11 @@ class App {
         time: data.time
       });
     });
+
+    socket.on('disconnect', () => {
+      console.log('Socket desconectado: ' + socket.id);
+      socket.disconnect();
+    });
   }
 }
 
