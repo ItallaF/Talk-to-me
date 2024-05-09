@@ -1,5 +1,5 @@
 'use client'
-import { Camera, Cameramutate, Computer, Computermutate, Mic, Micmutate, Phone } from "@/Icons";
+import { Camera, Cameramutate, Computer, Computermutate, Mic, Micmutate, Phone, Message } from "@/Icons";
 import Container from "./Container";
 import { MutableRefObject, useState } from "react";
 
@@ -95,11 +95,11 @@ export default function Footer({
   return (
     <footer className="fixed bottom-0 bg-black py-6 w-full">
       <Container>
-        <div className="grid grid-cols-3">
-          <div className="flex items-center">
+        <div className="tablet:grid tablet:grid-cols-3 phone:grid phone:grid-cols-repeat(1, minmax(0, 1fr))">
+          <div className="flex items-center phone:justify-center">
             <span className="text-xl">{hours}{minutes}</span>
           </div>
-          <div className="flex space-x-6 justify-center">
+          <div className="gap-2 grid laptop:grid-cols-4 phone:grid-cols-2 phone:justify-items-center ph:grid-cols-2 ph:justify-items-center">
             {isMuted ? (
               <Micmutate className="h-12 w-16 text-white p-2 cursor-pointer bg-red-500 rounded-md"
                 onClick={() => toggleMuted()} />
@@ -122,7 +122,11 @@ export default function Footer({
                 onClick={() => toggleScreenSharing()} />
             )}
             <Phone className="h-12 w-16 text-white p-2 hover:bg-red-500 cursor-pointer bg-primary rounded-md"
-              onClick={() => logout() } />
+              onClick={() => logout()} />
+          </div>
+          <div className="grid justify-items-end">
+            <Message className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
+            onClick={() => toggleMuted()} />
           </div>
         </div>
       </Container>

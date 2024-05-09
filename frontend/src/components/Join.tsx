@@ -20,7 +20,7 @@ export default function Join() {
 
   return (
     <form onSubmit={(e) => handleJoinRoom(e)} className="space-y-8">
-      <div className="min-w-[580px] bg-secondary rounded-b-lg space-y-8 p-10">
+      <div className="tablet:min-w-[580px] bg-secondary rounded-b-lg space-y-8 p-10 phone:min-w-[340px]">
         <Input placeholder="Seu Nome" type="text" ref={name} />
         <Input placeholder="ID da reunião" type="text" ref={id} />
 

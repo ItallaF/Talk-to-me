@@ -26,7 +26,7 @@ export default function Create() {
   return (
     <>
       <form onSubmit={(e) => handleCreateRoom(e)} className="space-y-8">
-        <div className="min-w-[580px] bg-secondary rounded-b-lg space-y-8 p-10">
+        <div className="tablet:min-w-[580px] bg-secondary rounded-b-lg space-y-8 p-10 phone:min-w-[340px]">
           <Input placeholder="Seu nome" type="text" ref={name} />
 
           <Button title="Criar" type="submit" />

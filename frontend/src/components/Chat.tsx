@@ -38,10 +38,11 @@ export default function Chat({ roomId }: { roomId: string }) {
       currentMsg.current.value = '';
     }
   }
+  //md:w-[15%] hidden md:flex rounded-md m-3 h-full
   return (
     <>
-      <div className=" relative min-h-[70vh] bg-gray-900 px-4 pt-4 md:w-[15%] hidden md:flex rounded-md m-3 h-full">
-        <div className=" h-full w-full">
+      <div className="relative min-h-[70vh] bg-gray-900 px-4 pt-4 w-[20%] tablet:cols-2">
+        <div className="flex h-[80%] w-full phone:justify-around">
           {chat.map((chat, index) => {
             return (
               <div className="bg-gray-950 rounded p-2 mb-4" key={index}>
@@ -56,7 +57,7 @@ export default function Chat({ roomId }: { roomId: string }) {
             )
           })}
 
-          <form className="absolute bottom-20 inset-x-2"
+          <form className="flex items-end"
             onSubmit={(e) => sendMessage(e)}>
             <div className="flex relative items-center">
               <input
