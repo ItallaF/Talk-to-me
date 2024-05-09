@@ -22,7 +22,7 @@ export default function FormWrapper() {
   
   return (
     <>
-      <div className=" flex items-center text-center">
+      <div className="flex items-center text-center">
         <span className={`w-1/2 p-4 cursor-pointer ${selectedRoom == 'join' && 'bg-secondary  rounded-t-lg text-primary'}`}
           onClick={() => handleSelectRoom('join')}>Ingressar
         </span>
@@ -30,7 +30,7 @@ export default function FormWrapper() {
           Nova Reunião
         </span>
       </div>
-      <div className=" max-auto w-full h-full flex flex-1 items-center justify-center">
+      <div className="max-auto w-full h-full flex flex-1 items-center justify-center">
         <RoomSelector selectedRoom={selectedRoom} />
       </div>
     </>

@@ -19,7 +19,7 @@ interface ICandidates {
 interface IDataStream {
   id: string;
   stream: MediaStream;
-  // username: string;
+  //username: string;
 }
 
 export default function Room({ params }: { params: { id: string } }) {
@@ -132,7 +132,7 @@ export default function Room({ params }: { params: { id: string } }) {
       const dataStream: IDataStream = {
         id: socketId,
         stream: remoteStream,
-        // username,
+        //username,
       };
 
       setRemoteStreams((prevState: IDataStream[]) => {
@@ -219,19 +219,19 @@ export default function Room({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="h-screen">
+    <div className="h-full">
       <Header />
-      <div className="flex h-[80%] ">
-        <div className="md:w-[85%] w-full m-3">
-          <div className="grid md:grid-cols-2 grid-cols-1 gap-8">
-            <div className="bg-gray-950 w-full rounded-md h-full p-2">
+      <div className="flex justify-center h-full">
+        <div className="tablet:w-[85%] w-full m-3">
+          <div className="grid tablet:grid-cols-2 gap-8 tablet:pb-[22%] phone:pb-[30%] laptop:pb-[10%]">
+            <div className="bg-gray-950 w-full rounded-tablet h-full p-2">
               <video className="w-full h-full mirror-mode"
                 autoPlay ref={localStream} />
               <span className="absolute bottom-35">Italla Felyne</span>
             </div>
             {remoteStreams.map((stream, index) => {
               return (
-                <div className="bg-gray-950 w-full rounded-md h-full p-2" key={index}>
+                <div className="bg-gray-950 w-full rounded-tablet h-full p-2" key={index}>
                   <video className="w-full h-full" autoPlay ref={(video) => {
                     if (video && video.srcObject !== stream.stream) video.srcObject = stream.stream;
                   }} />

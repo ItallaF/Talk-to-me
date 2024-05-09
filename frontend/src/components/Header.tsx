@@ -4,7 +4,7 @@ import Container from "./Container";
 export default function Header() {
 
   return (
-    <header className="bg-gray-1000 p-4">
+    <header className="bg-gray-1000 p-4 phone:min-w-full">
       <Container>
         <div className="flex justify-between">
           <Image alt="Talk to me!" src="/logo.svg" width={120} height={120} />
