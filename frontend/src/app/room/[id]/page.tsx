@@ -16,10 +16,10 @@ interface ICandidates {
   sender: string;
 }
 
-interface IDataStream {
+export interface IDataStream {
   id: string;
   stream: MediaStream;
-  //username: string;
+  username: string;
 }
 
 export default function Room({ params }: { params: { id: string } }) {
@@ -30,35 +30,46 @@ export default function Room({ params }: { params: { id: string } }) {
   const [videoMediaStream, setVideoMediaStream] = useState<MediaStream | null>(null,);
   const router = useRouter();
 
+
   useEffect(() => {
+    const username = sessionStorage.getItem('username');
     socket?.on('connect', async () => {
       console.log('conectado');
       socket?.emit('subscribe', {
         roomId: params.id,
         socketId: socket.id,
+        username,
       });
       await initLocalCamera();
     });
 
     socket?.on('new user', (data) => {
       console.log('Novo usuario tentando conectar', data);
-      createPeerConnection(data.socketId, false);
+      createPeerConnection(data.socketId, false, data.username);
       socket.emit('newUserStart', {
         to: data.socketId,
         sender: socket.id,
+        username,
       });
     });
 
     socket?.on('newUserStart', (data) => {
       console.log('Usuario coectado na sala', data);
-      createPeerConnection(data.sender, true);
+      createPeerConnection(data.sender, true, data.username);
     });
 
-    socket?.on('sdp', (data) => { handleAnswer(data) });
+    socket?.on('sdp', (data) => handleAnswer(data));
 
-    socket?.on('ice candidates', (data) => { handleIceCandidates(data) });
+    socket?.on('ice candidates', (data) => handleIceCandidates(data));
 
   }, [socket]);
+
+  const handleIceCandidates = async (data: ICandidates) => {
+    const peerConnection = peerConnections.current[data.sender];
+    if (data.candidate) {
+      await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+    }
+  };
 
   const handleAnswer = async (data: IAnswer) => {
     const peerConnection = peerConnections.current[data.sender];
@@ -82,14 +93,11 @@ export default function Room({ params }: { params: { id: string } }) {
     }
   };
 
-  const handleIceCandidates = async (data: ICandidates) => {
-    const peerConnection = peerConnections.current[data.sender];
-    if (data.candidate) {
-      await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
-    }
-  };
-
-  const createPeerConnection = async (socketId: string, createOffer: boolean) => {
+  const createPeerConnection = async (
+    socketId: string,
+    createOffer: boolean,
+    username: string,
+  ) => {
     const config = {
       iceServers: [
         {
@@ -132,7 +140,7 @@ export default function Room({ params }: { params: { id: string } }) {
       const dataStream: IDataStream = {
         id: socketId,
         stream: remoteStream,
-        //username,
+        username,
       };
 
       setRemoteStreams((prevState: IDataStream[]) => {
@@ -227,7 +235,7 @@ export default function Room({ params }: { params: { id: string } }) {
             <div className="bg-gray-950 w-full rounded-tablet h-full p-2">
               <video className="w-full h-full mirror-mode"
                 autoPlay ref={localStream} />
-              <span className="absolute bottom-35">Italla Felyne</span>
+              <span className="absolute bottom-35">{sessionStorage.getItem('username')}</span>
             </div>
             {remoteStreams.map((stream, index) => {
               return (
@@ -235,7 +243,7 @@ export default function Room({ params }: { params: { id: string } }) {
                   <video className="w-full h-full" autoPlay ref={(video) => {
                     if (video && video.srcObject !== stream.stream) video.srcObject = stream.stream;
                   }} />
-                  <span className="absolute bottom-35">Italla Felyne</span>
+                  <span className="absolute bottom-35">{stream.username}</span>
                 </div>
               )
             })}

@@ -1,10 +1,11 @@
+import { IDataStream } from "@/app/room/[id]/page";
 import { SocketContext } from "@/contexts/SocketContext";
 import Image from "next/image";
 import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 
 interface IChatMassage {
   mesage: string;
-  usarname: string;
+  username: string;
   roomId: string;
   time: string;
 }
@@ -13,41 +14,40 @@ export default function Chat({ roomId }: { roomId: string }) {
   const currentMsg = useRef<HTMLInputElement>(null);
   const { socket } = useContext(SocketContext);
   const [chat, setChat] = useState<IChatMassage[]>([]);
-
+  
   useEffect(() => {
     socket?.on('chat', (data) => {
-      console.log(data);
+      console.log('message DATA: ', data);
       setChat((prevState) => [...prevState, data]);
     })
   }, [socket]);
 
   function sendMessage(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(currentMsg.current?.value)
+    
     if (currentMsg.current && currentMsg.current?.value !== '') {
       const sendMsgToServer = {
         mesage: currentMsg.current.value,
-        usarname: 'Italla Felyne',
+        username: sessionStorage.getItem('username'),
         roomId,
         time: new Date().toLocaleTimeString(),
       };
 
       socket?.emit('chat', sendMsgToServer);
-      setChat((prevState) => [...prevState, sendMsgToServer]);
-
+      setChat((prevState) => [...prevState, { ...sendMsgToServer, username: sessionStorage.getItem('username') ?? '' }]);      
       currentMsg.current.value = '';
     }
   }
-  //md:w-[15%] hidden md:flex rounded-md m-3 h-full
+
   return (
     <>
       <div className="relative min-h-[70vh] bg-gray-900 px-4 pt-4 w-[20%] tablet:cols-2">
-        <div className="flex h-[80%] w-full phone:justify-around">
+        <div className="grid h-[80%] w-full phone:justify-around">
           {chat.map((chat, index) => {
             return (
               <div className="bg-gray-950 rounded p-2 mb-4" key={index}>
                 <div className="flex items-center text-pink-400 space-x-2">
-                  <span>{chat.usarname}</span>
+                  <span>{chat.username }</span>
                   <span>{chat.time}</span>
                 </div>
                 <div className="mt-5 text-sm">

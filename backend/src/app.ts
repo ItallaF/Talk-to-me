@@ -56,6 +56,7 @@ class App {
       socket.to(data.to).emit('sdp', {
         description: data.description,
         sender: data.sender,
+        username: data.username,
       });
     });
 
