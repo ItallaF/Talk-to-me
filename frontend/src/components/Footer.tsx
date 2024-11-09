@@ -95,38 +95,44 @@ export default function Footer({
   return (
     <footer className="fixed bottom-0 bg-black py-6 w-full">
       <Container>
-        <div className="tablet:grid tablet:grid-cols-3 phone:grid phone:grid-cols-repeat(1, minmax(0, 1fr))">
-          <div className="flex items-center phone:justify-center">
+        <div className="tablet:grid tablet:grid-cols-3 phone:grid phone:grid-cols-repeat(1, minmax(0, 1fr)) ph:grid-cols-repeat(1, minmax(0, 1fr))">
+          <div className="flex items-center phone:justify-center ph:justify-center">
             <span className="text-xl">{hours}{minutes}</span>
           </div>
-          <div className="gap-2 grid laptop:grid-cols-4 phone:grid-cols-2 phone:justify-items-center ph:grid-cols-2 ph:justify-items-center">
-            {isMuted ? (
-              <Micmutate className="h-12 w-16 text-white p-2 cursor-pointer bg-red-500 rounded-md"
+          <div className="gap-2 grid laptop:grid-cols-4 phone:grid-cols-[0.7fr_5%] phone:justify-items-center
+          ph:grid-cols-[0.7fr_5%] ph:justify-items-center tablet:col-[2_/_span_3] tablet:grid-cols-2">
+            <div className="grid ph:grid-cols-2 ph:gap-4 ph:ml-5 phone:grid-cols-2 phone:gap-8 phone:ml-0
+            tablet:gap-x-16 tablet:gap-y-5 laptop:flex laptop:justify-self-start">
+              {isMuted ? (
+                <Micmutate className="h-12 w-16 text-white p-2 cursor-pointer bg-red-500 rounded-md"
+                  onClick={() => toggleMuted()} />
+              ) : (
+                <Mic className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
+                  onClick={() => toggleMuted()} />
+              )}
+              {isCameraOff ? (
+                <Cameramutate className="h-12 w-16 text-white p-2 cursor-pointer bg-red-500 rounded-md"
+                  onClick={() => toggleVideo()} />
+              ) : (
+                <Camera className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
+                  onClick={() => toggleVideo()} />
+              )}
+              {isScreenSharing ? (
+                <Computermutate className="h-12 w-16 text-white p-2 cursor-pointer bg-red-500 rounded-md"
+                  onClick={() => toggleScreenSharing()} />
+              ) : (
+                <Computer className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
+                  onClick={() => toggleScreenSharing()} />
+              )}
+              <Phone className="h-12 w-16 text-white p-2 hover:bg-red-500 cursor-pointer bg-primary rounded-md"
+                onClick={() => logout()} />
+              {/* <Message className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
+              onClick={() => toggleMuted()} /> */}
+            </div>
+            <div className="grid justify-items-center ph:content-center phone:content-center tablet:content-normal laptop:col-[4_/_span_2]">
+              <Message className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
                 onClick={() => toggleMuted()} />
-            ) : (
-              <Mic className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
-                onClick={() => toggleMuted()} />
-            )}
-            {isCameraOff ? (
-              <Cameramutate className="h-12 w-16 text-white p-2 cursor-pointer bg-red-500 rounded-md"
-                onClick={() => toggleVideo()} />
-            ) : (
-              <Camera className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
-                onClick={() => toggleVideo()} />
-            )}
-            {isScreenSharing ? (
-              <Computermutate className="h-12 w-16 text-white p-2 cursor-pointer bg-red-500 rounded-md"
-                onClick={() => toggleScreenSharing()} />
-            ) : (
-              <Computer className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
-                onClick={() => toggleScreenSharing()} />
-            )}
-            <Phone className="h-12 w-16 text-white p-2 hover:bg-red-500 cursor-pointer bg-primary rounded-md"
-              onClick={() => logout()} />
-          </div>
-          <div className="grid justify-items-end">
-            <Message className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
-            onClick={() => toggleMuted()} />
+            </div>
           </div>
         </div>
       </Container>
