@@ -1,7 +1,6 @@
 import Container from "@/components/Container";
 import FormWrapper from "@/components/FormWrapper";
 import Header from "@/components/Header";
-import Image from "next/image";
 
 
 export default function Home() {
@@ -11,7 +10,7 @@ export default function Home() {
       <div className="mx-auto w-full h-full flex flex-1 items-center justify-center phone:min-w-full">
         <Container>
           <FormWrapper />
-        </Container>      
+        </Container>
       </div>
     </main>
   );
