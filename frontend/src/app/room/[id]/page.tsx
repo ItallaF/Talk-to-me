@@ -28,8 +28,24 @@ export default function Room({ params }: { params: { id: string } }) {
   const peerConnections = useRef<Record<string, RTCPeerConnection>>({});
   const [remoteStreams, setRemoteStreams] = useState<IDataStream[]>([]);
   const [videoMediaStream, setVideoMediaStream] = useState<MediaStream | null>(null,);
+  const [isMobileView, setIsMobileView] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobileView(window.innerWidth <= 425);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const username = sessionStorage.getItem('username');
@@ -249,12 +265,15 @@ export default function Room({ params }: { params: { id: string } }) {
             })}
           </div>
         </div>
-        <Chat roomId={params.id} />
+        {(isMobileView ? null : (
+          <Chat roomId={params.id} />
+        ))}
       </div>
       <Footer
         videoMediaStream={videoMediaStream!}
         peerConnections={peerConnections}
         localStream={localStream}
+        params={params}
         logout={logout}
       />
     </div>

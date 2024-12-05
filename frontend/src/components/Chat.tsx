@@ -41,8 +41,9 @@ export default function Chat({ roomId }: { roomId: string }) {
 
   return (
     <>
-      <div className="relative min-h-[70vh] bg-gray-900 px-4 pt-4 w-[20%] tablet:cols-2">
-        <div className="grid h-[80%] w-full phone:justify-around">
+      <div className="flex relative laptop:min-h-[70vh] tablet:min-h-[57vh] bg-gray-900 px-4 pt-4 w-[20%]
+      tablet:cols-2 phone:inset-0 phone:z-50 phone:mb-40">
+        <div className="grid w-full laptop:mb-20 tablet:mb-7">
           {chat.map((chat, index) => {
             return (
               <div className="bg-gray-950 rounded p-2 mb-4" key={index}>
