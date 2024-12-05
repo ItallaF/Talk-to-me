@@ -1,17 +1,27 @@
 'use client'
 import { Camera, Cameramutate, Computer, Computermutate, Mic, Micmutate, Phone, Message } from "@/Icons";
 import Container from "./Container";
-import { MutableRefObject, useState } from "react";
+import { MutableRefObject, useEffect, useState } from "react";
+import ChatMobille from "./ChatMobile";
+import Modal from "./Modal";
+
+type Message = {
+  id: number;
+  text: string;
+};
+
 
 export default function Footer({
   videoMediaStream,
   peerConnections,
   localStream,
+  params,
   logout
 }: {
   videoMediaStream: MediaStream;
   peerConnections: MutableRefObject<Record<string, RTCPeerConnection>>;
   localStream: MutableRefObject<HTMLVideoElement | null>;
+  params: { id: string };
   logout: () => void;
 }) {
   const [isMuted, setIsMuted] = useState(false);
@@ -20,6 +30,19 @@ export default function Footer({
   const date = new Date();
   const hours = date.getHours().toString().padStart(2, '0') + ':';
   const minutes = date.getMinutes().toString().padStart(2, '0');
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  const toggleModal = () => setModalOpen(!isModalOpen);
+
+  const handleSendMessage = (message: string) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { id: Date.now(), text: message },
+    ]);
+  };
 
   const toggleMuted = () => {
     videoMediaStream?.getAudioTracks().forEach((track) => {
@@ -92,6 +115,27 @@ export default function Footer({
     setIsScreenSharing(!isScreenSharing);
   };
 
+  const toggleChat = () => {
+    setIsChatOpen(!isChatOpen);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobileView(window.innerWidth > 425);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+
   return (
     <footer className="fixed bottom-0 bg-black py-6 w-full">
       <Container>
@@ -126,13 +170,16 @@ export default function Footer({
               )}
               <Phone className="h-12 w-16 text-white p-2 hover:bg-red-500 cursor-pointer bg-primary rounded-md"
                 onClick={() => logout()} />
-              {/* <Message className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
-              onClick={() => toggleMuted()} /> */}
             </div>
-            <div className="grid justify-items-center ph:content-center phone:content-center tablet:content-normal laptop:col-[4_/_span_2]">
-              <Message className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
-                onClick={() => toggleMuted()} />
-            </div>
+            {(isMobileView ? null : (
+              <div className="grid justify-items-center ph:content-center phone:content-center tablet:content-normal laptop:col-[4_/_span_2]">
+                <Message className="h-12 w-16 text-white p-2 cursor-pointer bg-gray-950 rounded-md"
+                  onClick={toggleModal} />
+                <Modal isOpen={isModalOpen} onClose={toggleModal} title="Chat">
+                  <ChatMobille messages={messages} onSendMessage={handleSendMessage} roomId={params.id}/>
+                </Modal>
+              </div>
+            ))}
           </div>
         </div>
       </Container>
